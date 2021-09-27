@@ -1,103 +1,107 @@
-import React, { Fragment, Component } from 'react';
+import React from 'react';
+import Header from '../Header/Header';
+import Login from '../Login/Login';
+import Footer from '../Footer/Footer';
+import Notifications from '../Notifications/Notifications';
+import CourseList from '../CourseList/CourseList';
+import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
+import BodySection from '../BodySection/BodySection';
+import highOrderComponent from '../HOC/WithLogging';
+import {
+  listCourses,
+  listNotifications 
+} from '../utils';
 import PropTypes from 'prop-types';
 import { StyleSheet, css } from 'aphrodite';
 
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
-import Login from '../Login/Login';
-import Notifications from '../Notifications/Notifications';
-import CourseList from '../CourseList/CourseList';
-import BodySection from '../BodySection/BodySection';
-import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
+function Body(props) {
 
-class App extends Component {
+  if (props.isLoggedIn) {
+    return (
+      <div className="CourseBody">
+        <BodySectionWithMarginBottom title="Course list">
+          <CourseList listCourses={listCourses}/>
+          <BodySection title="News from the school">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duisaute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa quiofficia deserunt mollit anim id est laborum.</p>
+          </BodySection>
+        </BodySectionWithMarginBottom>
+      </div>
+    );
+  } else {
+    const WithLoggingLogin = highOrderComponent(Login);
+    return (
+      <BodySectionWithMarginBottom title="Log in to continue">
+        <WithLoggingLogin />
+        <BodySection title="News from the school">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duisaute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa quiofficia deserunt mollit anim id est laborum.</p>
+          </BodySection>
+      </BodySectionWithMarginBottom>
+    );
+  }
+}
+
+class App extends React.Component {
   constructor(props) {
-    super(props)
-    this.handleLogout = this.handleLogout.bind(this);
+    super(props);
+
+    this.handleKeypress = this.handleKeypress.bind(this);
+  }
+
+  handleKeypress(event) {
+    const logout = () => {
+      window.alert('Logging you out');
+      this.props.logOut();
+    };
+
+    if (event.code === 'KeyH' && event.ctrlKey) logout();
+    if (event.code === 'KeyZ' && event.ctrlKey) logout();
   }
 
   componentDidMount() {
-      window.addEventListener("keydown", this.handleLogout);
+    window.addEventListener('keypress', this.handleKeypress);
   }
 
   componentWillUnmount() {
-      window.removeEventListener("keydown", this.handleLogout);
+    window.removeEventListener('keypress', this.handleKeypress);
   }
 
-  handleLogout (event) {
-      if (event.ctrlKey && event.key === 'h') {
-          event.preventDefault();
-          alert("Logging you out");
-          this.props.logOut();
-      }
-    }
   render() {
-    const { isLoggedIn } = this.props;
+    const isLoggedIn = (this.props.isLoggedIn) ? this.props.isLoggedIn : false;
 
-  const listCourses = [
-    { id: 1, name: 'ES6', credit: 60 },
-    { id: 2, name: 'Webpack', credit: 20 },
-    { id: 3, name: 'React', credit: 40 }
-  ];
-
-  const listNotifications = [
-    { id: 1, type: 'default', value: 'New course available' },
-    { id: 2, type: 'urgent', value: 'New resume available' },
-    {
-      id: 3,
-      type: 'urgent',
-      html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' }
-    }
-  ];
-
-  return (
-    <Fragment>
-      <Notifications listNotifications={listNotifications} />
-      <div className={css(styles['sans-serif'])}>
-        <Header />
-        <div className={css(styles.padding)}>
-          {!isLoggedIn && (
-                  <BodySectionWithMarginBottom title='Log in to continue'>
-                    <Login />
-                  </BodySectionWithMarginBottom>
-                )}
-                {isLoggedIn && (
-                  <BodySectionWithMarginBottom title='Course List'>
-                    <CourseList listCourses={listCourses} />
-                  </BodySectionWithMarginBottom>
-                )}
-                <BodySection title='News from the School'>
-                  <p>
-                    A paragraph with some random text. A paragraph with some random text.
-                    A paragraph with some random text. A paragraph with some random text.
-                    A paragraph with some random text. A paragraph with some random text.
-                  </p>
-                </BodySection>
-	    </div>
-        <Footer />
-      </div>
-    </Fragment>
-  );
- }
+    return (
+      <React.Fragment>
+        <Notifications displayDrawer={true} listNotifications={listNotifications}/>
+        <div className={css(styles.App)}>
+          <Header />
+          <div className={css(styles.body)}>
+            <Body isLoggedIn={isLoggedIn}/>
+          </div>
+          <Footer />
+        </div>
+      </React.Fragment>
+    );
+  }
 }
 
 App.propTypes = {
-  isLoggedIn: PropTypes.bool,
   logOut: PropTypes.func
-};
+}
 
 App.defaultProps = {
-  isLoggedIn: false,
-  logOut: () => undefined
-};
+  logOut: () => {}
+}
 
 const styles = StyleSheet.create({
-  'sans-serif': {
-    fontFamily: 'sans-serif'
+  App: { padding: "0rem 1rem" },
+
+  body: {
+    borderTop: '4px solid rgb(223, 57, 81)',
+    borderBottom: '4px solid rgb(223, 57, 81)',
+    minHeight: '20rem',
+    padding: '3rem'
   },
-  padding: {
-    padding: '4rem'
-  }
+
+  footer: {}
 });
-  
+
 export default App;

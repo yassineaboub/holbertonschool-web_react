@@ -1,59 +1,36 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { StyleSheet, css } from 'aphrodite';
 
-const Login = () => {
+function Login() {
     return (
-      <Fragment>
-        <p>Log in to access the full dashboard</p>
-        <div className={css(styles.form)}>
-        <div className={css(styles['input-group'])}>
-	<label htmlFor='email' className={css(styles.label, styles['email-label'])}>Email:</label>
-        <input type='email' name='email' id='email' />
+        <div className={css(styles.bruh)}>
+            <p>Login to access the full dashboard</p>
+            <div className={css(styles.small)}>
+                <div>
+                    <label htmlFor="email">Email: </label>
+                    <input type="email" id="email" />
+                </div>
+                <div>
+                    <label htmlFor="password">Password: </label>
+                    <input type="password" id="password"/>
+                </div>
+                <button style={{maxWidth: '2.5rem'}}>OK</button>
+            </div>
         </div>
-      <div className={css(styles['input-group'])}>
-        <label htmlFor='password' className={css(styles.label)}>Password:</label>
-        <input type='password' name='password' id='password' />
-      </div>  
-        <button className={css(styles.button)}>OK</button>
-      </div>
-      </Fragment>
     );
-  };
-
-Login.displayName = 'Login';
+}
 
 const styles = StyleSheet.create({
-  label: {
-    '@media (min-width: 901px)': {
-      padding: '1rem'
+    bruh: {
+        margin: 0
     },
-    '@media (max-width: 900px)': {
-      marginRight: '0.5rem'
-    } 
-  },
-  'email-label': {
-    paddingLeft: 0
-  },
-  button: {
-    '@media (min-width: 901px)': {
-      margin: '0 2rem'
-    },
-    '@media (max-width: 900px)': {
-      margin: '0.25rem 0'
+
+    small: {
+        display: 'flex',
+        '@media (max-width: 900px)': {
+            flexDirection: 'column'
+        }
     }
-  },
-  form: {
-    // display: 'flex',
-    // flexWrap: 'wrap',
-    // alignContent: 'flex-start'
-  },
-  'input-group': {
-    display: "inline",
-    '@media (max-width: 900px)': {
-      margin: '0.25rem 0',
-      display: 'block'
-    }
-  }
 });
-  
-  export default Login;
+
+export default Login;

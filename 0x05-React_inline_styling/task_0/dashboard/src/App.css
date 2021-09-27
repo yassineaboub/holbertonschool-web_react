@@ -1,0 +1,11 @@
+:root {
+  --holby-red: rgb(223, 57, 81);
+  --logo-size: 15rem;
+  --body-border: 4px solid var(--holby-red);
+  --min-body-height: 20rem;
+  --body-padding: 3rem;
+}
+
+.App {
+  padding: 0rem 0.5rem;
+}

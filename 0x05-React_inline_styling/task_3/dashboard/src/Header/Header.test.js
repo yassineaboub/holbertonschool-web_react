@@ -1,31 +1,22 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import { expect } from 'chai';
-import { StyleSheetTestUtils } from 'aphrodite';
-
 import Header from './Header';
+import React from 'react';
+import { shallow, mount, render } from 'enzyme';
+import { equal as assert } from 'assert';
 
-describe('Header', () => {
-  beforeEach(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
-  });
+describe("Header component", () => {
+    it('Renders', () => {
+        const wrapper = shallow(<Header />);
+        assert(true, wrapper.exists());
+    });
 
-  afterEach(() => {
-    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
-  });  
-  test('renders without crashing', () => {
-    const wrapper = shallow(<Header />);
+    it('Has children img & h1', () => {
+        const wrapper = shallow(<Header />);
+        const node = wrapper.render();
+        const children = node.children();
 
-    expect(wrapper.exists());
-  });
-
-  test('renders an image and h1', () => {
-    const wrapper = shallow(<Header />);
-
-    const image = wrapper.find('img');
-    const h1 = wrapper.find('h1');
-
-    expect(image.exists());
-    expect(h1.exists());
-  });
+        const img = children[0];
+        const h1 = children[1];
+        assert('img', img.name);
+        assert('h1', h1.name);
+    });
 });

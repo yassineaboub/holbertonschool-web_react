@@ -1,49 +1,56 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { StyleSheet, css } from 'aphrodite';
 
-const CourseListRow = ({ isHeader, textFirstCell, textSecondCell }) => {
-  const style = { 'background-color': isHeader ? '#deb5b54' : '#f5f5f5ab' };
-  return (
-    <tr style={style}>
-      {isHeader ? (
-        textSecondCell === null ? (
-          <th colSpan='2' className={css(styles.cell)}>{textFirstCell}</th>
-        ) : (
-          <Fragment>
-            <th className={css(styles.cell, styles['align-left'])}>{textFirstCell}</th>
-            <th className={css(styles.cell, styles['align-left'])}>{textSecondCell}</th>
-          </Fragment>
-        )
-      ) : (
-        <Fragment>
-          <td className={css(styles.cell)}>{textFirstCell}</td>
-          <td className={css(styles.cell)}>{textSecondCell}</td>          
-        </Fragment>
-      )}
-    </tr>
-  );
-};
+function CourseListRow(props) {
+    const isHeader = (props.isHeader) ? props.isHeader : false;
+    const textFirstCell = (props.textFirstCell) ? props.textFirstCell : null;
+    const textSecondCell = (props.textSecondCell) ? props.textSecondCell.toString() : null;
 
-CourseListRow.propTypes = {
-  isHeader: PropTypes.bool,
-  textFirstCell: PropTypes.string.isRequired,
-  textSecondCell: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-};
+    if (textFirstCell === null) throw(new Error('textFirstCell is required'));
 
-CourseListRow.defaultProps = {
-  isHeader: false,
-  textSecondCell: null
-};
+    if (isHeader) {
+        if(textSecondCell === null) {
+            return (
+                <tr>
+                    <th colSpan="2" className={css(styles.header)}>
+                        {textFirstCell}
+                    </th>
+                </tr>
+            );
+        } else {
+            return (
+                <tr className={css(styles.default)}>
+                    <th className={css(styles.algin)}>
+                        {textFirstCell}
+                    </th>
+                    <th className={css(styles.algin)}>
+                        {textSecondCell}
+                    </th>
+                </tr>
+            );
+        }
+    } else {
+        return (
+            <tr>
+                <td>{textFirstCell}</td>
+                <td>{textSecondCell}</td>
+            </tr>
+        );
+    }
+}
 
 const styles = StyleSheet.create({
-  cell: {
-    padding: '0.25rem',
-    border: '1px solid lightgray'
-  },
-  'align-left': {
-    textAlign: 'left'
-  }
+    default: {
+        backgroundColor: '#f5f5f5ab'
+    },
+
+    header: {
+        backgroundColor: '#deb5b545'
+    },
+
+    algin: {
+        textAlign: 'start'
+    }
 });
 
 export default CourseListRow;

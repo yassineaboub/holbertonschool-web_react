@@ -1,22 +1,17 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import { expect } from 'chai';
-
 import Footer from './Footer';
+import React from 'react';
+import { shallow, mount, render } from 'enzyme';
+import { equal as assert } from 'assert';
 
 describe('Footer', () => {
-  test('renders without crashing', () => {
-    const wrapper = shallow(<Footer />);
+    it('Renders', () => {
+        const wrapper = shallow(<Footer />);
+        assert(true, wrapper.exists());
+    });
 
-    expect(wrapper.exists());
-  });
-
-  test('copy text contains at least "Copyright"', () => {
-    const wrapper = shallow(<Footer />);
-    const p = wrapper.find('p');
-
-    const re = /Copyright/;
-
-    expect(re.test(wrapper.text()));
-  });
+    it('Has Copyright', () => {
+        const node = shallow(<Footer />).render().children()['0'];
+        const text = node.children[0];
+        assert(true, text.data.includes('Copyright'));
+    });
 });

@@ -1,0 +1,15 @@
+.CourseBody {
+    border-top: var(--body-border);
+    border-bottom: var(--body-border);
+    min-height: var(--min-body-height);
+    padding: var(--body-padding);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead, tbody {
+    border: 1px solid rgba(75, 74, 74, 0.3);
+}

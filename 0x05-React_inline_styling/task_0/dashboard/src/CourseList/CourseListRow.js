@@ -1,38 +1,41 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 
-const CourseListRow = ({ isHeader, textFirstCell, textSecondCell }) => {
-  const style = { 'background-color': isHeader ? '#deb5b54' : '#f5f5f5ab' };
-  return (
-    <tr style={style}>
-      {isHeader ? (
-        textSecondCell === null ? (
-          <th colSpan='2'>{textFirstCell}</th>
-        ) : (
-          <Fragment>
-            <th>{textFirstCell}</th>
-            <th>{textSecondCell}</th>
-          </Fragment>
-        )
-      ) : (
-        <Fragment>
-          <td>{textFirstCell}</td>
-          <td>{textSecondCell}</td>
-        </Fragment>
-      )}
-    </tr>
-  );
-};
+function CourseListRow(props) {
+    const isHeader = (props.isHeader) ? props.isHeader : false;
+    const textFirstCell = (props.textFirstCell) ? props.textFirstCell : null;
+    const textSecondCell = (props.textSecondCell) ? props.textSecondCell.toString() : null;
 
-CourseListRow.propTypes = {
-  isHeader: PropTypes.bool,
-  textFirstCell: PropTypes.string.isRequired,
-  textSecondCell: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-};
+    if (textFirstCell === null) throw(new Error('textFirstCell is required'));
 
-CourseListRow.defaultProps = {
-  isHeader: false,
-  textSecondCell: null
-};
+    if (isHeader) {
+        if(textSecondCell === null) {
+            return (
+                <tr>
+                    <th colSpan="2" style={{backgroundColor: "#deb5b545"}}>
+                        {textFirstCell}
+                    </th>
+                </tr>
+            );
+        } else {
+            return (
+                <tr style={{backgroundColor: "#f5f5f5ab"}}>
+                    <th style={{textAlign: "start"}}>
+                        {textFirstCell}
+                    </th>
+                    <th style={{textAlign: "start"}}>
+                        {textSecondCell}
+                    </th>
+                </tr>
+            );
+        }
+    } else {
+        return (
+            <tr>
+                <td>{textFirstCell}</td>
+                <td>{textSecondCell}</td>
+            </tr>
+        );
+    }
+}
 
 export default CourseListRow;

@@ -1,46 +1,62 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { StyleSheetTestUtils } from 'aphrodite';
-
+import assert from 'assert';
+import { shallow, render } from 'enzyme';
 import CourseListRow from './CourseListRow';
 
 describe('CourseListRow', () => {
-  beforeEach(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
-  });
+    describe('isHeader', () => {
+        describe('True', () => {
+            it('textSecondCell not set', () => {
+                const wrapper = render(
+                    <CourseListRow 
+                        isHeader={true}
+                        textFirstCell="name"
+                    />);
+    
+                const th = wrapper.children()[0];
+                assert.equal(th.name, 'th');
+                assert.equal(th.attribs.colspan, '2');
+            });
 
-  afterEach(() => {
-    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
-  });
-  test('renders one cell with colspan of 2 if isHeader is true and textSecondCell does not exist', () => {
-    const wrapper = shallow(
-      <CourseListRow isHeader={true} textFirstCell='test' />
-    );
-    const th = wrapper.find('th');
+            it('textSecondCell set', () => {
+                const wrapper = shallow(
+                    <CourseListRow 
+                        isHeader={true}
+                        textFirstCell="name"
+                        textSecondCell="value"
+                    />);
 
-    expect(th.length).toBe(1);
-    expect(th.props()).toHaveProperty('colSpan', '2');
-  });
+                const children = wrapper.render().children().toArray();
+                const cells = [];
+                children.forEach((child) => {
+                    const text = child.firstChild.data;
+                    cells.push(text);
+                });
 
-  test('renders one tr element with two td elements if isHeader is true and textSecondCell is present', () => {
-    const wrapper = shallow(
-      <CourseListRow
-        isHeader={true}
-        textFirstCell='test'
-        textSecondCell='test'
-      />
-    );
-    const th = wrapper.find('th');
+                assert.equal(cells[0], 'name');
+                assert.equal(cells[1], 'value');
+            });
+        });
+    });
 
-    expect(th.length).toBe(2);
-  });
+    describe('False', () => {
+        it('tr w/ correct td', () => {
+            const wrapper = shallow(
+                <CourseListRow
+                    isHeader={false}
+                    textFirstCell="name"
+                    textSecondCell="value"
+                />
+            );
+            const tr = wrapper.render()[0];
+            const cells = [];
+            tr.children.forEach((child) => {
+                const text = child.children[0];
+                cells.push(text.data);
+            });
 
-  test('renders two td elements if isHeader is false', () => {
-    const wrapper = shallow(
-      <CourseListRow isHeader={false} textFirstCell='test' />
-    );
-    const tds = wrapper.find('td');
-
-    expect(tds.length).toBe(2);
-  });
+            assert.equal(cells[0], 'name');
+            assert.equal(cells[1], 'value');
+        });
+    });
 });

@@ -1,72 +1,49 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { StyleSheetTestUtils } from 'aphrodite';
-
+import { shallow, render } from 'enzyme';
 import CourseList from './CourseList';
-import CourseListRow from './CourseListRow';
+import assert from 'assert';
+import { listCourses } from '../utils';
 
 describe('CourseList', () => {
-  beforeEach(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
-  });
+    describe('Renders', () => {
+        it('w/o listCourses', () => {
+            const wrapper = shallow(<CourseList />);
+            assert.equal(wrapper.render().length !== 0, true);
+        });
 
-  afterEach(() => {
-    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
-  }); 
-  test('renders without crashing', () => {
-    const wrapper = shallow(<CourseList />);
-
-    expect(wrapper.exists()).toBe(true);
-  });
-
-describe('listCourses is empty', () => {
-    test('renders correctly if not specified', () => {
-      const wrapper = shallow(<CourseList />);
-
-      const rows = wrapper.find(CourseListRow);
-      expect(rows.length).toBe(2);
-
-      const td = wrapper.find('tbody tr td');
-      expect(td.length).toBe(1);
-      expect(td.props()).toHaveProperty('colSpan', '2');
-      expect(td.text()).toBe('No course available yet');
+        it('w/ listCourses', () => {
+            const wrapper = shallow(<CourseList listCourses={listCourses}/>);
+            assert.equal(wrapper.render().length !== 0, true);
+        });
     });
 
-    test('renders correctly if empty array', () => {
-      const wrapper = shallow(<CourseList listCourses={[]} />);
+    describe('Correctly display courses', () => {
+        it('Has three courses', () => {
+            const wrapper = shallow(<CourseList listCourses={listCourses}/>);
+            const table = wrapper.render()['0'];
+            const tr = [];
+            table.children.forEach(
+                (child) => {
+                    const children = child.children;
+                    tr.push(...children);
+                }
+            );
+    
+            assert.equal(tr.length, 5);
+        });
 
-      const rows = wrapper.find(CourseListRow);
-      expect(rows.length).toBe(2);
-
-      const td = wrapper.find('tbody tr td');
-      expect(td.length).toBe(1);
-      expect(td.props()).toHaveProperty('colSpan', '2');
-      expect(td.text()).toBe('No course available yet');
+        it('Has no courses', () => {
+            const wrapper = shallow(<CourseList />);
+            const table = wrapper.render()['0'];
+            const tr = [];
+            table.children.forEach(
+                (child) => {
+                    const children = child.children;
+                    tr.push(...children);
+                }
+            );
+    
+            assert.equal(tr.length, 3);
+        });
     });
-  });
-
-  describe('listCourses is not empty', () => {
-    const courses = [
-      { id: 0, name: 'HTML and CSS', credit: 20 },
-      { id: 1, name: 'Javascript', credit: 40 }
-    ];
-
-    const wrapper = shallow(<CourseList listCourses={courses} />);
-    const rows = wrapper.find(CourseListRow);
-
-    test('renders correct amount of rows', () => {
-      expect(rows.length).toBe(4);
-    });
-
-    test('renders rows with correct props', () => {
-      expect(rows.at(2).props()).toHaveProperty(
-        'textFirstCell',
-        'HTML and CSS'
-      );
-      expect(rows.at(2).props()).toHaveProperty('textSecondCell', 20);
-
-      expect(rows.at(3).props()).toHaveProperty('textFirstCell', 'Javascript');
-      expect(rows.at(3).props()).toHaveProperty('textSecondCell', 40);
-    });
-  });
 });

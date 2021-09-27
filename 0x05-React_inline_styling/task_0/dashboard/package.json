@@ -1,53 +1,48 @@
 {
-  "name": "react_with_no_cra",
+  "name": "dashboard",
   "version": "1.0.0",
-  "description": "React with no CRA",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --config config/webpack.config.js",
     "test": "jest",
     "test-watch": "jest --watch",
-    "build": "webpack --config config/webpack.config.js"
+    "dev": "webpack --mode development --config ./config/webpack.config.js",
+    "build": "webpack --mode production --config ./config/webpack.config.js",
+    "start": "webpack serve --mode development --config ./config/webpack.config.js"
   },
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "dependencies": {
-    "aphrodite": "^2.4.0",
-    "chai": "^4.2.0",
-    "prop-types": "^15.7.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "sinon": "^9.2.4"
-  },
   "devDependencies": {
-    "@babel/core": "^7.11.1",
-    "@babel/preset-env": "^7.11.0",
-    "@babel/preset-react": "^7.10.4",
-    "@testing-library/jest-dom": "^5.11.3",
-    "@testing-library/react": "^10.4.8",
-    "@testing-library/user-event": "^12.1.1",
-    "babel": "^6.23.0",
-    "babel-jest": "^26.3.0",
-    "babel-loader": "^8.1.0",
-    "css-loader": "^4.2.1",
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
+    "@babel/preset-react": "^7.14.5",
+    "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "^4.0.0-alpha.0",
+    "css-loader": "^5.2.6",
     "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.3",
-    "file-loader": "^6.0.0",
-    "html-webpack-plugin": "^4.3.0",
-    "image-webpack-loader": "^6.0.0",
-    "jest": "^26.4.0",
-    "react-test-renderer": "^16.13.1",
-    "sinon-chai": "^3.5.0",
-    "style-loader": "^1.2.1",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "enzyme-adapter-react-16": "^1.15.6",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.3.2",
+    "image-webpack-loader": "^7.0.1",
+    "jest": "^27.0.6",
+    "jquery": "^3.6.0",
+    "prop-types": "^15.7.2",
+    "style-loader": "^3.0.0",
+    "web-vitals": "^2.0.1",
+    "webpack": "^5.41.1",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "jest": {
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/__mocks__/fileMock.js",
-      "\\.css$": "<rootDir>/__mocks__/styleMock.js"
+      "\\.(css|jpg|png)$": "<rootDir>/__mocks__/styleMock.js"
     },
-    "setupFiles": [
+    "setupFilesAfterEnv": [
       "<rootDir>/config/setupTests.js"
     ]
   }

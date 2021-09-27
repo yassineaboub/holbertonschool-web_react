@@ -1,0 +1,12 @@
+
+.App-header {
+    display: flex;
+    color: var(--holby-red);
+    text-align: center;
+    align-items: center;
+}
+
+.App-logo {
+    height: var(--logo-size);
+    width: var(--logo-size);
+}

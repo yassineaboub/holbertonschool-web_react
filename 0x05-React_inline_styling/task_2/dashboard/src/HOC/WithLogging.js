@@ -1,25 +1,33 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-function WithLogging(Comp) {
+function highOrderComponent(Component) {
 
-    return class extends Component {
+    class NewComponent extends React.Component {
         constructor(props) {
             super(props);
-            this.displayName = `WithLogging(${Comp.displayName || 'Component'})`;
+            NewComponent.displayName = `WithLogging(${Component.name})`;
         }
 
         componentDidMount() {
-            console.log(`Component ${Comp.displayName} is mounted`);
+            console.log(`Component ${this.props.name} is mounted`)
         }
 
         componentWillUnmount() {
-            console.log(`Component ${Comp.displayName} is going to unmount`);
+            console.log(`Component ${this.props.name} is going to unmount`)
         }
 
-        render() {
-            return <Comp {...this.props} />
+        displayName() {
+            console.log(`WithLogging(${this.props.name})`);
+        }
+
+        render(){
+            return(
+                <Component />
+            );
         }
     }
+
+    return NewComponent;
 }
 
-export default WithLogging;
+export default highOrderComponent;

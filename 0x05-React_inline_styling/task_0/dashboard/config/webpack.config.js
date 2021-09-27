@@ -1,42 +1,55 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
-const HTMLWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  mode: 'development',
-  entry: './src/index.js',
-  output: {
-    path: path.resolve(__dirname, '..', 'dist'),
-    filename: 'bundle.js'
-  },
-  plugins: [
-    new HTMLWebpackPlugin({
-      filename: 'index.html',
-      template: './dist/index.html'
-    })
-  ],
-  devServer: {
-    host: '0.0.0.0',
-    port: 8080
-  }, 
-  module: {
-    rules: [
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: 'babel-loader'
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      },
-      {
-        test: /\.(gif|png|jpe?g|svg)$/i,
-        use: [
-          'file-loader',
-          { loader: 'image-webpack-loader', options: { disable: true } }
+    // plugins: [
+    //     // new HtmlWebpackPlugin({
+    //     //     title: 'Webpack Output',
+    //     // }),
+    //     // new CleanWebpackPlugin()
+    // ],
+    entry: {
+        main: path.resolve(__dirname, '../src/index.js')
+    },
+    output: {
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, '../dist')
+    },
+    devServer: {
+        contentBase: path.resolve(__dirname, '../dist'),
+        hot: true
+    },
+    module: {
+        rules: [
+          { 
+            test: /\.css$/, 
+            use: ["style-loader", "css-loader"] 
+          },
+          {
+            test: /\.(gif|png|jpe?g|svg)$/i,
+            use: [
+              'file-loader',
+              {
+                loader: 'image-webpack-loader',
+                options: {
+                  bypassOnDebug: true, // webpack@1.x
+                  disable: true, // webpack@2.x and newer
+                },
+              },
+            ]
+          },
+          {
+            test: /.jsx?$/,
+            exclude: /(node_modules|bower_components)/,
+            use: {
+              loader: 'babel-loader',
+              // options: {
+              //   presets: ['@babel/preset-env']
+              // }
+            }
+          },
         ]
-      }
-    ]
-  },
-  devtool: 'inline-source-map'
+    },
+    devtool: "inline-source-map",
 };

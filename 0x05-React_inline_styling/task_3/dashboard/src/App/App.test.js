@@ -1,80 +1,70 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import { expect } from 'chai';
-import { StyleSheetTestUtils } from 'aphrodite';
-
 import App from './App';
-import Notifications from '../Notifications/Notifications';
 import Header from '../Header/Header';
 import Login from '../Login/Login';
 import Footer from '../Footer/Footer';
-import CourseList from '../CourseList/CourseList';
-
+import Notification from '../Notifications/Notifications';
+import React from 'react';
+import { shallow, mount, render } from 'enzyme';
 
 describe('App', () => {
-  beforeEach(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
-  });
+    it('Does not crash', () => {
+        const wrapper = render(<App />);
+        expect(wrapper);
+    });
 
-  afterEach(() => {
-    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
-  });
-    test('renders without crashing', () => {
-      const wrapper = shallow(<App />);
-      expect(wrapper.exists());
-});
-  test('renders Notifications component', () => {
-    const wrapper = shallow(<App />);
-    const notifs = wrapper.find(Notifications);
+    it('Does not contain CourseList', () => {
+        const wrapper = render(<App />);
+        const courselist = wrapper.find('#CourseList');
+        expect(courselist.length).toBe(0);
+    });
 
-    expect(notifs).to.have.lengthOf(1);
-  });
+    describe('App-header', () => {
+        it('App renders div with class App-header', () => {
+            const node = shallow(<Header />).render()['0'];
+            expect(node.type).toBe('tag');
+            expect(node.name).toBe('div');
+            expect(node.attribs.class).toBe('App-header');
+        });
+        
+    });
 
-  test('renders Header component', () => {
-    const wrapper = shallow(<App />);
-    const header = wrapper.find(Header);
+    describe('App-body', () => {
+        it('App renders div with class App-body', () => {
+            const node = shallow(<Login />).render()['0'];
+            expect(node.type).toBe('tag');
+            expect(node.name).toBe('div');
+            expect(node.attribs.class).toBe('App-body');
+        });
+    });
 
-    expect(header).to.have.lengthOf(1);
-  });
+    describe('App-footer', () => {
+        it('App renders div with class App-footer', () => {
+            const node = shallow(<Footer />).render()['0'];
+            expect(node.type).toBe('tag');
+            expect(node.name).toBe('div');
+            expect(node.attribs.class).toBe('App-footer');
+        });
+    });
 
-  test('renders Login component', () => {
-    const wrapper = shallow(<App />);
-    const login = wrapper.find(Login);
+    describe('Notifications', () => {
+        it('Notifications', () => {
+            const node = shallow(<Footer />).render()['0'];
+            expect(node);
+        });
+    });
 
-    expect(login).to.have.lengthOf(1);
-  });
+    describe('Logged In', () => {
+        it('Not Login component', () => {
+            const wrapper = render(<App isLoggedIn={true}/>);
+            const login = wrapper.find('.App-body');
+            expect(login.length).toBe(0);
+        });
 
-  test('renders Footer component', () => {
-    const wrapper = shallow(<App />);
-    const footer = wrapper.find(Footer);
+        it('Has CourseList', () => {
+            const wrapper = render(<App isLoggedIn={true}/>);
+            const courselist = wrapper.find('#CourseList');
+            expect(courselist.length).toBe(1);
+        });
+    });
 
-    expect(footer).to.have.lengthOf(1);
-  });
-  test('course list NOT displayed by default', () => {
-    const wrapper = shallow(<App />);
-    const courseList = wrapper.find(CourseList);
-
-    expect(courseList).to.have.lengthOf(0);
-  });
-
-  test('if logged in, course list is displayed and login form is NOT', () => {
-    const wrapper = shallow(<App isLoggedIn={true} />);
-
-    const login = wrapper.find(Login);
-    const courseList = wrapper.find(CourseList);
-
-    expect(login).to.have.lengthOf(0);
-    expect(courseList).to.have.lengthOf(1);
-  }); 
-});
-  test('logOut alerts with correct string', () => {
-    const myLogOut = jest.fn(() => undefined);
-    const myAlert = jest.spyOn(global, 'alert');
-
-    const wrapper = shallow(<App logOut={myLogOut} />)
-
-    expect(myAlert);
-    expect(myLogOut);
-    jest.restoreAllMocks();
-  });
 });
